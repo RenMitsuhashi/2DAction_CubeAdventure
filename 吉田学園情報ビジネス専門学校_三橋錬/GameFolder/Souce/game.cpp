@@ -65,7 +65,7 @@ HRESULT CGame::Init()
 		break;
 	}
 
-	m_pGameBg = CGameBg::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CTexture::GetTexture(CTexture::Tex_BgGame));
+	m_pGameBg = CGameBg::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CTexture::GetTexture(CTexture::Tex_Fade));
 
 	CManager::GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
 	CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_BGM_GAME, 0.3f);

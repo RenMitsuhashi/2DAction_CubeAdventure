@@ -1,76 +1,9 @@
-﻿  bg.cpp
-bg.cpp(12): warning C4589: 抽象クラス 'CBg' のコンストラクターは仮想基底クラス 'CScene2D' の初期化子を無視します
-  bg.cpp(12): note: 仮想基底クラスは最派生クラス型によってのみ初期化されます
-  block.cpp
-block.cpp(12): warning C4589: 抽象クラス 'CBlock' のコンストラクターは仮想基底クラス 'CScene2D' の初期化子を無視します
-  block.cpp(12): note: 仮想基底クラスは最派生クラス型によってのみ初期化されます
-  camera.cpp
-  character.cpp
-character.cpp(12): warning C4589: 抽象クラス 'CCharacter' のコンストラクターは仮想基底クラス 'CScene2D' の初期化子を無視します
-  character.cpp(12): note: 仮想基底クラスは最派生クラス型によってのみ初期化されます
-  cursor.cpp
-  data.cpp
-  deathcount.cpp
-  effect.cpp
-  fade.cpp
-  game.cpp
-  gamebg.cpp
-gamebg.cpp(146): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-  gamepad.cpp
-gamepad.cpp(153): warning C4100: 'pvRef': 引数は関数の本体部で 1 度も参照されません。
-gamepad.cpp(153): warning C4100: 'ipddi': 引数は関数の本体部で 1 度も参照されません。
-gamepad.cpp(186): warning C4244: 'return': 'const DWORD' から 'float' への変換です。データが失われる可能性があります。
-gamepad.cpp(188): warning C4305: 'return': 'unsigned int' から 'float' へ切り詰めます。
-gamepad.cpp(199): warning C4244: 'return': 'const DWORD' から 'float' への変換です。データが失われる可能性があります。
-gamepad.cpp(202): warning C4305: 'return': 'unsigned int' から 'float' へ切り詰めます。
-  goal.cpp
-  gravityreverse.cpp
-  input.cpp
-  keyboard.cpp
-  light.cpp
-  main.cpp
-main.cpp(33): warning C4100: 'lpCmdLine': 引数は関数の本体部で 1 度も参照されません。
-main.cpp(33): warning C4100: 'hPrevInstance': 引数は関数の本体部で 1 度も参照されません。
-  manager.cpp
-  model.cpp
-  コンパイル中...
-  modeselect.cpp
-  mouse.cpp
-  normalblock.cpp
-  number.cpp
-  objectbg.cpp
-  pause.cpp
-  planet.cpp
-  player.cpp
-  renderer.cpp
-renderer.cpp(218): warning C4100: 'hWnd': 引数は関数の本体部で 1 度も参照されません。
-  result.cpp
-  screenbg.cpp
-  spiny.cpp
-  tentativeobj.cpp
-  scene.cpp
-  scene2D.cpp
-scene2D.cpp(602): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-scene2D.cpp(607): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  scene3D.cpp
-  sound.cpp
-sound.cpp(48): warning C4100: 'hWnd': 引数は関数の本体部で 1 度も参照されません。
-  stagebuild.cpp
-  Stageload.cpp
-Stageload.cpp(220): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-  targetblock.cpp
-  コンパイル中...
-  targetcursor.cpp
-  texture.cpp
-  time.cpp
-time.cpp(108): warning C4244: '*=': 'float' から 'int' への変換です。データが失われる可能性があります。
-time.cpp(109): warning C4244: '*=': 'float' から 'int' への変換です。データが失われる可能性があります。
-  title.cpp
-  uibg.cpp
+﻿  gamebg.cpp
+gamebg.cpp(151): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  772 of 808 functions (95.5%) were compiled, the rest were copied from previous compilation.
-    3 functions were new in current compilation
-    21 functions had inline decision re-evaluated but remain unchanged
+  1 of 808 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   C++2DAction.vcxproj -> C:\Users\student\Desktop\Gitゲームフォルダ\2DAction_CubeAdventurer\吉田学園情報ビジネス専門学校_三橋錬\GameFolder\Souce\Release\C++2DAction.exe
   C++2DAction.vcxproj -> C:\Users\student\Desktop\Gitゲームフォルダ\2DAction_CubeAdventurer\吉田学園情報ビジネス専門学校_三橋錬\GameFolder\Souce\Release\C++2DAction.pdb (Full PDB)

@@ -142,6 +142,11 @@ void CGameBg::Update()
 			}
 		}
 
+		D3DCOLORVALUE colbg = col;
+		colbg.a = 24.0f;
+
+		SetColor(colbg);
+
 		std::uniform_real_distribution<> randsize(15, 25);
 		float sizerand = randsize(mt);
 

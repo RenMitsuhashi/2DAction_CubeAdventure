@@ -513,11 +513,6 @@ void CCursor::Update()
 			SaveFile();
 			m_nNowSave = 256;
 		}
-
-		if (CManager::GetKeyboard()->GetTrigger(DIK_H))
-		{
-			CManager::GetFade()->SetFade(CManager::MODE_GAME, 5);
-		}
 	}
 
 	//=============================================================================
