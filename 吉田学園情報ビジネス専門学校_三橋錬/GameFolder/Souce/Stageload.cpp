@@ -269,8 +269,8 @@ HRESULT CStageLoad::SaveFile()
 			{
 				// 移動量決め
 				float movex = 0.0f, movey = 0.0f;
-				movex = CoverObj->GetMove().x;
-				movey = CoverObj->GetMove().y;
+				movex = fabs(CoverObj->GetstartMove().x);
+				movey = fabs(CoverObj->GetstartMove().y);
 
 				if (movex != 0.0f)
 				{
@@ -361,16 +361,27 @@ void CStageLoad::StageCreate(int type, D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVE
 		switch (type)
 		{
 		case OBJ_NormalBlock:
-			move.x *= CScene::Sign(targetpos.x);
+			// ブロック
+
+			// 動かないブロックとして置いたならmoveとstoptimeを0にする
+			if (targetpos == D3DXVECTOR3(0.0f, 0.0f, 0.0f))
+			{
+				move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				stoptime = 0;
+			}
+
+			// targetposの方向に移動方向が向くようにする
+			move.x *= CScene::Sign(targetpos.x); 
 			move.y *= CScene::Sign(targetpos.y);
 
-			m_pNormalBlock = CNormalBlock::Create(D3DXVECTOR3(pos.x + m_Grid.x / 2.0f, pos.y + m_Grid.y / 2.0f, 0.0f), D3DXVECTOR3(move.x, move.y, 0.0f), D3DXVECTOR3(m_Grid.x, m_Grid.y, 0.0f), D3DXVECTOR3(targetpos.x * GetGrid().x, targetpos.y * GetGrid().y, 0.0f), stoptime, CTexture::GetTexture(CTexture::Tex_NormalBlock));
+			m_pNormalBlock = CNormalBlock::Create(D3DXVECTOR3(pos.x + m_Grid.x / 2.0f, pos.y + m_Grid.y / 2.0f, 0.0f), D3DXVECTOR3(move.x, move.y, 0.0f), D3DXVECTOR3(m_Grid.x, m_Grid.y, 0.0f), targetpos * *m_Grid, stoptime, CTexture::GetTexture(CTexture::Tex_NormalBlock));
 			m_pNormalBlock->SetobjType(type);
 			m_pNormalBlock->SetColor(col);
 
+			// 動くブロックとして置いたならtargetblockも一緒に作成する
 			if (m_pNormalBlock->GetTargetPos() != D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 			{
-				m_pTargetBlock = CTargetBlock::Create(m_pNormalBlock->GetPos() + m_pNormalBlock->GetTargetPos(), m_pNormalBlock->GetMove(), m_pNormalBlock->GetSize(), D3DXVECTOR3(m_pNormalBlock->GetTargetPos().x * -1.0f, m_pNormalBlock->GetTargetPos().y * -1.0f, 0.0f), 0, CTexture::GetTexture(CTexture::Tex_NormalBlock));
+				m_pTargetBlock = CTargetBlock::Create(pos + (m_Grid / 2.0f) + m_pNormalBlock->GetTargetPos(), m_pNormalBlock->GetMove(), m_pNormalBlock->GetSize(), D3DXVECTOR3(m_pNormalBlock->GetTargetPos().x * -1.0f, m_pNormalBlock->GetTargetPos().y * -1.0f, 0.0f), 0, CTexture::GetTexture(CTexture::Tex_NormalBlock));
 				m_pTargetBlock->SetobjType(OBJ_TargetBlock);
 
 				minusQuantity(OBJ_TargetBlock);
@@ -379,30 +390,35 @@ void CStageLoad::StageCreate(int type, D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVE
 			break;
 
 		case OBJ_Player:
+			// プレイヤー
 			m_pPlayer = CPlayer::Create(D3DXVECTOR3(pos.x + m_Grid.x / 2, pos.y + m_Grid.y / 2, 0.0f), D3DXVECTOR3(move.x, move.y, 0.0f), D3DXVECTOR3(m_Grid.x - (m_Grid.x / 8.0f), m_Grid.y - (m_Grid.y / 8.0f), 0.0f), CTexture::GetTexture(CTexture::Tex_Player));
 			m_pPlayer->SetobjType(type);
 
 			break;
 
 		case OBJ_Reverse:
+			// 重力反転
 			m_pReverse = CGravityReverse::Create(D3DXVECTOR3(pos.x + m_Grid.x / 2, pos.y + m_Grid.y / 2, 0.0f), D3DXVECTOR3(move.x, move.y, 0.0f), D3DXVECTOR3(m_Grid.x, m_Grid.y, 0.0f), CTexture::GetTexture(CTexture::Tex_Reverse));
 			m_pReverse->SetobjType(type);
 
 			break;
 
 		case OBJ_Goal:
+			// ゴール
 			m_pGoal = CGoal::Create(D3DXVECTOR3(pos.x + m_Grid.x / 2, pos.y + m_Grid.y / 2, 0.0f), D3DXVECTOR3(move.x, move.y, 0.0f), D3DXVECTOR3(m_Grid.x, m_Grid.y, 0.0f), CTexture::GetTexture(CTexture::Tex_Goal));
 			m_pGoal->SetobjType(type);
 
 			break;
 
 		case OBJ_Spiny:
+			// 棘
 			m_pSpiny = CSpiny::Create(D3DXVECTOR3(pos.x + m_Grid.x / 2, pos.y + m_Grid.y / 2, 0.0f), D3DXVECTOR3(move.x, move.y, 0.0f), D3DXVECTOR3(m_Grid.x, m_Grid.y, 0.0f), ptn, CTexture::GetTexture(CTexture::Tex_Spiny));
 			m_pSpiny->SetobjType(type);
 
 			break;
 		}
 
+		// オブジェクトの残量を減らす
 		minusQuantity(type);
 	}
 	

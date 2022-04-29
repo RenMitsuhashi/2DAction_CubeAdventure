@@ -35,6 +35,7 @@ CTitle::~CTitle()
 //=============================================================================
 HRESULT CTitle::Init()
 {
+	// タイトル画面を構成するオブジェクト達
 	m_pScreenBg[Title_Bg] = CScreenBg::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CTexture::GetTexture(CTexture::Tex_BgTitle));
 	m_pScreenBg[Title_Game] = CScreenBg::Create(D3DXVECTOR3(450.0f, SCREEN_HEIGHT / 2 + 150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(300.0f, 75.0f, 0.0f), CTexture::GetTexture(CTexture::Tex_TitleUIGame));
 	m_pScreenBg[Title_Build] =CScreenBg::Create(D3DXVECTOR3(450.0f, SCREEN_HEIGHT / 2 + 250.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(300.0f, 75.0f, 0.0f), CTexture::GetTexture(CTexture::Tex_TitleUIBuild));

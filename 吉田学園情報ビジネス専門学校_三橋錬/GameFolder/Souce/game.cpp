@@ -43,19 +43,23 @@ HRESULT CGame::Init()
 	m_pLight = CLight::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR3(100.0f, -100.0f, 0.0f), 0);
 	m_pPlanet = CPlanet::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), CTexture::GetTexture(CTexture::Tex_Planet));
 
+	// ステージによって読み込むファイルを変更
 	switch (CData::GetNextStage())
 	{
 	case CData::Stage_Tutorial:
+		// チュートリアル
 		CStageLoad::LoadFile("data\\stage\\stage_tutorial.csv");
 
 		break;
 
 	case CData::Stage_01:
+		// ステージ1
 		CStageLoad::LoadFile("data\\stage\\stage01.csv");
 
 		break;
 
 	case CData::Stage_Build:
+		// ビルダーで作成したステージ
 		CStageLoad::LoadFile("data\\stage\\stage.csv");
 
 		break;

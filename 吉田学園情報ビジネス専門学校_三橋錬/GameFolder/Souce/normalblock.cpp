@@ -64,6 +64,9 @@ void CNormalBlock::Update(void)
 	if (CData::GetPause() &&
 		CData::GetNowGame())
 	{
+		//=============================================================================
+		// (下に動く、かつtargetに到達した) or (右に動く、かつtargetに到達した)
+		//=============================================================================
 		if ((GetMove().x > 0.0f && GetPos().x > m_targetpos.x) ||
 			(GetMove().y > 0.0f && GetPos().y > m_targetpos.y))
 		{
@@ -74,6 +77,9 @@ void CNormalBlock::Update(void)
 			m_bGo = !m_bGo;
 		}
 
+		//=============================================================================
+		// (上に動く、かつtargetに到達した) or (左に動く、かつtargetに到達した)
+		//=============================================================================
 		else if ((GetMove().x < 0.0f && GetPos().x < m_targetpos.x) ||
 				 (GetMove().y < 0.0f && GetPos().y < m_targetpos.y))
 		{
@@ -84,34 +90,45 @@ void CNormalBlock::Update(void)
 			m_bGo = !m_bGo;
 		}
 
+		//=============================================================================
+		// 止まっているとき
+		//=============================================================================
 		else if (GetMove() == D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 		{
 			m_fTime++;
 
+			// 停止時間を超過したら動かす
 			if (m_fTime > GetStopTime())
 			{
 				m_fTime = 0;
 
+				//=============================================================================
+				// 行き
+				//=============================================================================
 				if (m_bGoing)
 				{
+					// targetが右にある場合
 					if (m_targetpos.x - GetstartPos().x > 0.0f)
 					{
 						m_targetpos.x -= GetTargetPos().x;
 						SetMoveX(fabs(m_move.x) * -1.0f);
 					}
 
+					// 左
 					else
 					{
 						m_targetpos.x -= GetTargetPos().x;
 						SetMoveX(fabs(m_move.x));
 					}
 
+					// targetが下にある場合
 					if (m_targetpos.y - GetstartPos().y > 0.0f)
 					{
 						m_targetpos.y -= GetTargetPos().y;
 						SetMoveY(fabs(m_move.y) * -1.0f);
 					}
 
+					// 上
 					else
 					{
 						m_targetpos.y -= GetTargetPos().y;
@@ -119,6 +136,9 @@ void CNormalBlock::Update(void)
 					}
 				}
 
+				//=============================================================================
+				// 帰り
+				//=============================================================================
 				else
 				{
 					m_targetpos = GetstartPos() + GetTargetPos();

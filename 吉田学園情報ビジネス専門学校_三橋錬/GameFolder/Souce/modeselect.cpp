@@ -61,6 +61,7 @@ void CModeSelect::Update()
 {
 	if (CFade::GetFade() == CFade::FADE_NONE)
 	{
+		// カーソルを上へ
 		if (CManager::GetKeyboard()->GetTrigger(DIK_W) ||
 			CManager::GetKeyboard()->GetTrigger(DIK_UP))
 		{
@@ -75,6 +76,7 @@ void CModeSelect::Update()
 			}
 		}
 
+		// カーソルを下へ
 		if (CManager::GetKeyboard()->GetTrigger(DIK_S) ||
 			CManager::GetKeyboard()->GetTrigger(DIK_DOWN))
 		{
@@ -91,34 +93,40 @@ void CModeSelect::Update()
 
 		for (int objCnt = CTitle::Title_Game; objCnt < CTitle::Title_Max; objCnt++)
 		{
+			// オブジェクトサイズを初期値に
 			CTitle::GetScreenBg(objCnt)->SetSize(D3DXVECTOR3(300.0f, 75.0f, 0.0f));
 		}
-
+		// 選ばれたオブジェクトをちょっと大きく
 		CTitle::GetScreenBg(m_nSelect)->SetSize(D3DXVECTOR3(350.0f, 100.0f, 0.0f));
 
 		D3DXVECTOR3 pos = CTitle::GetScreenBg(m_nSelect)->GetPos();
 		pos.x = GetPos().x;
 		SetPositionCenter(pos, GetSize());
 
+		// ENTERキーで確定
 		if (CManager::GetKeyboard()->GetTrigger(DIK_SPACE) ||
 			CManager::GetKeyboard()->GetTrigger(DIK_RETURN))
 		{
 			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_PRESS);
 			CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_PRESS, 0.5f);
 
+			// シーン遷移
 			switch (m_nSelect)
 			{
 			case CTitle::Title_Game:
+				// ゲームシーン
 				CManager::GetFade()->SetFade(CManager::MODE_GAME, 5);
 
 				break;
 
 			case CTitle::Title_Build:
+				// ビルダーシーン
 				CManager::GetFade()->SetFade(CManager::MODE_BUILD, 5);
 
 				break;
 
 			case CTitle::Title_Quit:
+				// ゲーム終了
 				PostQuitMessage(0);
 				break;
 

@@ -64,11 +64,13 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size, LPDIR
 
 	CScene2D::Init(tex);
 
+	// ゴール用のポリゴンを初期化
 	for (int nCnt = 0; nCnt < Texture_Max; nCnt++)
 	{
 		m_pUIBg[nCnt] = NULL;
 	}
 
+	// 死亡エフェクトを初期化
 	for (int nCnt = 0; nCnt < m_nDeathEffectCnt; nCnt++)
 	{
 		m_pDeathEffect[nCnt] = NULL;
@@ -98,7 +100,7 @@ void CPlayer::Update(void)
 	col.b = 255.0f;
 	col.a = 128.0f;
 
-	// ゴール演出
+	// ゴール中なら演出させる
 	if (m_bGoal)
 	{
 		Goal();
@@ -116,7 +118,7 @@ void CPlayer::Update(void)
 			CData::AddTime();
 		}
 
-		// 死亡演出
+		// 死亡したなら演出させる
 		if (m_bDeath)
 		{
 			Death();
@@ -124,6 +126,7 @@ void CPlayer::Update(void)
 
 		else
 		{
+			// 空中にいるか判定(当たり判定を取得して足がついていたらfalseに変える)
 			m_bJump = true;
 			col.a = 255.0f;
 
@@ -180,6 +183,7 @@ void CPlayer::Update(void)
 				return;
 			}
 
+			// プレイヤーに重力をかける
 			SetMoveY(GetMove().y + m_Speed.y * CData::GetGravity() / 0.6f);
 
 			// 変更したposを反映させる
@@ -195,6 +199,7 @@ void CPlayer::Update(void)
 			{
 				if (GetColision(nCnt) != NULL)
 				{
+					// ゴールオブジェクトに当たったら
 					if (GetColision(nCnt)->GetobjType() == CStageLoad::OBJ_Goal)
 					{
 						// ゲームシーンならリザルトへ遷移
@@ -222,10 +227,12 @@ void CPlayer::Update(void)
 				{
 					if (CManager::GetData()->GetGravity() < 0.0f)
 					{
+						// 足がついている判定にする
 						m_bJump = false;
 
 						if (GetColision(DIRECTION_UP)->GetTargetPos() == D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 						{
+							// 死ぬ前に踏んでいたブロックと、その時にかかっていた重力を保存
 							m_pLastStepblock = GetColision(DIRECTION_UP);
 							m_fLastStepGravity = CData::GetGravity();
 						}
@@ -240,10 +247,12 @@ void CPlayer::Update(void)
 				{
 					if (CManager::GetData()->GetGravity() > 0.0f)
 					{
+						// 足がついている判定にする
 						m_bJump = false;
 
 						if (GetColision(DIRECTION_DOWN)->GetTargetPos() == D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 						{
+							// 死ぬ前に踏んでいたブロックと、その時にかかっていた重力を保存
 							m_pLastStepblock = GetColision(DIRECTION_DOWN);
 							m_fLastStepGravity = CData::GetGravity();
 						}
@@ -255,12 +264,16 @@ void CPlayer::Update(void)
 			// 摩擦
 			//=============================================================================
 
+			//=============================================================================
 			// 左向き
+			//=============================================================================
 			if (GetMove().x < 0.0f)
 			{
 				m_nType = Player_Left;
 
+				//=============================================================================
 				// 重力が下向きの時
+				//=============================================================================
 				if (GetColision(DIRECTION_DOWN) != NULL)
 				{
 					// 当たっているブロックが動いていたら
@@ -268,6 +281,7 @@ void CPlayer::Update(void)
 						GetColision(DIRECTION_DOWN)->GetMove().x != 0.0f &&
 						CManager::GetData()->GetGravity() > 0.0f)
 					{
+						// プレイヤーもそれに合わせて動かす
 						SetMoveX(GetColision(DIRECTION_DOWN)->GetMove().x);
 					}
 
@@ -277,7 +291,9 @@ void CPlayer::Update(void)
 					}
 				}
 
+				//=============================================================================
 				// 重力が上向きの時
+				//=============================================================================
 				else if (GetColision(DIRECTION_UP) != NULL)
 				{
 					// 当たっているブロックが動いていたら
@@ -285,6 +301,7 @@ void CPlayer::Update(void)
 						GetColision(DIRECTION_UP)->GetMove().x != 0.0f &&
 						CManager::GetData()->GetGravity() < 0.0f)
 					{
+						// プレイヤーもそれに合わせて動かす
 						SetMoveX(GetColision(DIRECTION_UP)->GetMove().x);
 					}
 
@@ -304,12 +321,16 @@ void CPlayer::Update(void)
 				if (GetMove().x > 0.0f)	SetMoveX(0.0f);
 			}
 
+			//=============================================================================
 			// 右向き
+			//=============================================================================
 			else if (GetMove().x > 0.0f)
 			{
 				m_nType = Player_Right;
 
+				//=============================================================================
 				// 重力が下向きの時
+				//=============================================================================
 				if (GetColision(DIRECTION_DOWN) != NULL)
 				{
 					// 当たっているブロックが動いていたら
@@ -317,6 +338,7 @@ void CPlayer::Update(void)
 						GetColision(DIRECTION_DOWN)->GetMove().x != 0.0f &&
 						CManager::GetData()->GetGravity() > 0.0f)
 					{
+						// プレイヤーもそれに合わせて動かす
 						SetMoveX(GetColision(DIRECTION_DOWN)->GetMove().x);
 					}
 
@@ -326,7 +348,9 @@ void CPlayer::Update(void)
 					}
 				}
 
+				//=============================================================================
 				// 重力が上向きの時
+				//=============================================================================
 				else if (GetColision(DIRECTION_UP) != NULL)
 				{
 					// 当たっているブロックが動いていたら
@@ -334,6 +358,7 @@ void CPlayer::Update(void)
 						GetColision(DIRECTION_UP)->GetMove().x != 0.0f &&
 						CManager::GetData()->GetGravity() < 0.0f)
 					{
+						// プレイヤーもそれに合わせて動かす
 						SetMoveX(GetColision(DIRECTION_UP)->GetMove().x);
 					}
 
@@ -379,11 +404,20 @@ void CPlayer::Update(void)
 			//=============================================================================
 			if (GetPos().x >= SCREEN_WIDTH / 4.0f)
 			{
+				// スクロールさせる
 				CData::MoveQuantity(GetPos().x - GetPosold().x);
+
+				// プレイヤーの初期位置が(SCREEN_WIDTH / 4.0f)以上だった場合
+				if (GetPos().x - (SCREEN_WIDTH / 4.0f + CData::GetMoveQuantity()) > 0.0f)
+				{
+					// さらにスクロールさせる
+					CData::MoveQuantity(GetPos().x - SCREEN_WIDTH / 4.0f);
+				}
 			}
 
 			else
 			{
+				// 画面の左端にいるならスクロールをやめる
 				CData::ZeroMoveQuantity();
 			}
 
@@ -403,6 +437,7 @@ void CPlayer::Update(void)
 					SetMoveY(JUMP_HEIGHT);
 
 				m_bJump = true;
+
 				CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
 				CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_JUMP, 0.1f);
 				CManager::GetSound()->ControllPitch(CSound::SOUND_LABEL_SE_JUMP, 5.0f, 10.0f);
@@ -412,7 +447,6 @@ void CPlayer::Update(void)
 			// 重力変更(WSキー)
 			//=============================================================================
 			// 重力が下向きなら
-
 			bool bKey = false;
 
 			if (CData::GetGravity() > 0)
@@ -458,8 +492,10 @@ void CPlayer::Update(void)
 				}
 			}
 
+			// このフレーム中に重力を変更していたなら
 			if (bKey)
 			{
+				// 重力に応じて音声のピッチを変更する
 				float grav = (fabs(CData::GetGravity()) - GetMinGrav()) * 4.0f;
 
 				CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_GRAVUPDOWN);
@@ -507,6 +543,7 @@ void CPlayer::Reset()
 {
 	if (CData::GetNowScene() == CManager::MODE_GAME)
 	{
+		// 死ぬ前にいた位置に戻す
 		CData::MoveQuantity(m_pLastStepblock->GetPos().x - GetPosold().x);
 	}
 
@@ -546,6 +583,7 @@ void CPlayer::Death()
 {
 	SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
+	// 死亡エフェクトを作成
 	for (int nCnt = 0; nCnt < m_nDeathEffectCnt; nCnt++)
 	{
 		if (m_pDeathEffect[nCnt] == NULL)
@@ -556,6 +594,7 @@ void CPlayer::Death()
 
 	m_nDeathTime++;
 
+	// 死亡クールタイムが終わったら復活
 	if (m_nDeathTime > m_nDeathTimeMax)
 	{
 		ReverseDeath();
@@ -563,11 +602,13 @@ void CPlayer::Death()
 
 		Reset();
 
+		// 死亡カウントを1増やす
 		if (CData::GetNowScene() == CManager::MODE_GAME)
 		{
 			CData::AddDeathCount();
 		}
 
+		//役目を終えたエフェクトたちを解放
 		for (int nCnt = 0; nCnt < m_nDeathEffectCnt; nCnt++)
 		{
 			m_pDeathEffect[nCnt] = NULL;
@@ -581,18 +622,21 @@ void CPlayer::DeathEffectCreate(int num)
 	CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_DEATH, 0.5f);
 	CManager::GetSound()->ControllPitch(CSound::SOUND_LABEL_BGM_TITLE, 10.0f, 5.0f);
 
+	// エフェクトの色
 	D3DCOLORVALUE coleffect;
 	coleffect.r = 255.0f;
 	coleffect.g = 255.0f;
 	coleffect.b = 255.0f;
 	coleffect.a = 255.0f;
 
+	// 1fごとに減少させる色
 	D3DCOLORVALUE mincoleffect;
 	mincoleffect.r = 0.0f;
 	mincoleffect.g = 0.0f;
 	mincoleffect.b = 0.0f;
 	mincoleffect.a = 2.0f;
 
+	// 1fごとに減少させるサイズ
 	D3DXVECTOR3 minsize = D3DXVECTOR3(0.05f, 0.05f, 0.0f);
 
 	D3DXVECTOR3 pos = GetPos();
@@ -602,6 +646,7 @@ void CPlayer::DeathEffectCreate(int num)
 	float speed = 5.0f;
 	float pi = (float)M_PI;
 
+	// 円形にエフェクトを放出させる
 	float fMoveDirection = 0.0f;
 	fMoveDirection += 0.25f * (float)num;
 
@@ -643,16 +688,20 @@ void CPlayer::Goal()
 	switch (m_nGoalCount)
 	{
 	case Goal_Display:
+		// STAGE CLEAR!!のポリゴン
 		CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_GOALSHAKE);
 		CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_GOALSHAKE, 0.4f);
 
 		CData::ChangeNowGame();
+
+		// m_nGoalCount増加
 		m_nGoalCount++;
 		m_pUIBg[StageClear] = CUIBg::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), CTexture::GetTexture(CTexture::Tex_GoalLogo));
 
 		break;
 
 	case Goal_Shake:
+		// 画面を揺らす
 		m_nGoalTime++;
 
 		if (m_nGoalTime < 16)
@@ -660,6 +709,7 @@ void CPlayer::Goal()
 			RandomShake(D3DXVECTOR3(5.5f, 5.5f, 0.0f));
 		}
 
+		// 時間になったらm_nGoalCount増加
 		if (m_nGoalTime > 96)
 		{
 			m_nGoalTime = 0;
@@ -669,6 +719,7 @@ void CPlayer::Goal()
 		break;
 
 	case Goal_TimeDisplay:
+		// クリアタイム
 		m_nGoalTime++;
 
 		if (m_pUIBg[ClearTimeLogo] == NULL)
@@ -679,6 +730,7 @@ void CPlayer::Goal()
 			m_pUIBg[ClearTimeLogo] = CUIBg::Create(D3DXVECTOR3(500.0f, SCREEN_HEIGHT / 2 + 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(300.0f, 75.0f, 0.0f), CTexture::GetTexture(CTexture::Tex_Time));
 		}
 
+		// 時間になったらクリアタイムを表示
 		if (m_nGoalTime > 32 && m_pTime == NULL)
 		{
 			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_GOALLOGO);
@@ -687,6 +739,7 @@ void CPlayer::Goal()
 			m_pTime = CTime::Create(D3DXVECTOR3(1000.0f, SCREEN_HEIGHT / 2 + 100.0f, 0.0f), D3DXVECTOR3(35.0f, 75.0f, 0.0f));
 		}
 
+		// m_nGoalCount増加
 		if (m_nGoalTime > 96)
 		{
 			m_nGoalTime = 0;
@@ -696,6 +749,7 @@ void CPlayer::Goal()
 		break;
 
 	case Goal_DeathCountDisplay:
+		// 死亡数
 		m_nGoalTime++;
 
 		if (m_pUIBg[DeathCountLogo] == NULL)
@@ -706,6 +760,7 @@ void CPlayer::Goal()
 			m_pUIBg[DeathCountLogo] = CUIBg::Create(D3DXVECTOR3(500.0f, SCREEN_HEIGHT / 2 + 200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(300.0f, 75.0f, 0.0f), CTexture::GetTexture(CTexture::Tex_Death));
 		}
 
+		// 時間になったら死亡数を表示
 		if (m_nGoalTime > 32 && m_pDeathCount == NULL)
 		{
 			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_GOALLOGO);
@@ -714,6 +769,7 @@ void CPlayer::Goal()
 			m_pDeathCount = CDeathCount::Create(D3DXVECTOR3(1000.0f, SCREEN_HEIGHT / 2 + 200.0f, 0.0f), D3DXVECTOR3(35.0f, 75.0f, 0.0f));
 		}
 
+		// m_nGoalCount増加
 		if (m_nGoalTime > 128)
 		{
 			m_nGoalTime = 0;
@@ -723,6 +779,7 @@ void CPlayer::Goal()
 		break;
 
 	case Goal_PressEnterDisplay:
+		// PRESS ENTERのポリゴン
 		if (m_pUIBg[PressEnterLogo] == NULL)
 		{
 			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_GOALSHAKE);
@@ -733,18 +790,24 @@ void CPlayer::Goal()
 
 		if (CManager::GetFade()->GetFade() == CFade::FADE_NONE)
 		{
-			if (CManager::GetKeyboard()->GetTrigger(DIK_RETURN))
+			// ENTERキーを押すと次のステージへ
+			if (CManager::GetKeyboard()->GetTrigger(DIK_SPACE) || 
+				CManager::GetKeyboard()->GetTrigger(DIK_RETURN))
 			{
 				CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_ENTER);
 				CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_ENTER, 0.3f);
 
+				// 現在のステージが最終ステージならタイトルへ戻す
 				if (CData::GetNextStage() == CData::Stage_Max - 1)
 				{
 					CManager::GetFade()->SetFade(CManager::MODE_TITLE, 2);
 				}
 
-				CData::AddNextStage();
-				CManager::GetFade()->SetFade(CManager::MODE_GAME, 10);
+				else
+				{
+					CData::AddNextStage();
+					CManager::GetFade()->SetFade(CManager::MODE_GAME, 10);
+				}
 			}
 		}
 

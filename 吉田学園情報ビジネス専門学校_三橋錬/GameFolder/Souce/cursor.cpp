@@ -109,12 +109,15 @@ void CCursor::Update()
 	if (!CData::GetNowGame() &&
 		CData::GetPause())
 	{
+		// カーソルのposはマウスの座標を代入させる
 		D3DXVECTOR3 mouse = CManager::GetRenderer()->GetMousePos();
 		D3DXVECTOR3 pos = D3DXVECTOR3(floorf(mouse.x / GetSize().x) * GetSize().x, floorf(mouse.y / GetSize().y) * GetSize().y, 0.0f);
 
 		SetPositionCenter(pos + GetGrid() / 2, GetSize());
 
 		SetPos(pos + GetGrid() / 2);
+
+		// 画面スクロールに対応させる
 		SetPosX(pos.x + CData::GetMoveQuantity() + GetGrid().x / 2);
 
 		//=============================================================================
@@ -130,6 +133,7 @@ void CCursor::Update()
 				m_nType = OBJ_NULL + 1;
 			}
 
+			// 選ばれたオブジェクトのテクスチャに変更させる
 			BindTexture(CTexture::GetTexture(m_nType + tex));
 		}
 
@@ -143,26 +147,23 @@ void CCursor::Update()
 				m_nType = OBJ_TargetBlock - 1;
 			}
 
+			// 選ばれたオブジェクトのテクスチャに変更させる
 			BindTexture(CTexture::GetTexture(m_nType + tex));
 		}
 
 		if (m_nType == OBJ_Goal)
 		{
+			// ゴール用はテクスチャ座標をずらす
 			SetTexture(0, D3DXVECTOR2(4.0f, 1.0f));
 		}
 
 		else if (m_nType == OBJ_Spiny)
 		{
-			int grav = 0;
-
-			if (m_nSpinyDirection == 1)
-			{
-				grav = m_nSpinyDirection;
-			}
-
-			SetTexture(grav, D3DXVECTOR2(2.0f, 1.0f));
+			// 棘は向きによってテクスチャ座標をずらす
+			SetTexture(m_nSpinyDirection, D3DXVECTOR2(2.0f, 1.0f));
 		}
 
+		// 何かがおかしい時はここを通る
 		else
 		{
 			SetTexture(0, D3DXVECTOR2(1.0f, 1.0f));
@@ -183,6 +184,7 @@ void CCursor::Update()
 			CData::MoveQuantity(GetGrid().x);
 		}
 
+		// (〇〇をプラス)の増加量
 		int mul = 1;
 
 		if (CManager::GetKeyboard()->GetPress(DIK_LSHIFT))

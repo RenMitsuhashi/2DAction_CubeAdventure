@@ -74,10 +74,14 @@ void CGravityReverse::Update(void)
 
 	if (CData::GetNowGame())
 	{
+		//=============================================================================
+		// 使用後クールタイム
+		//=============================================================================
 		if (m_bUseCool)
 		{
 			m_nTime++;
 
+			// 時間になったr再使用可
 			if (m_nTime >= m_nTimeMax)
 			{
 				m_nTime = m_nTimeMax;
@@ -87,8 +91,12 @@ void CGravityReverse::Update(void)
 			col.a = (float)m_nTime;
 		}
 
+		//=============================================================================
+		// 使用可能
+		//=============================================================================
 		else
 		{
+			// プレイヤーに当たったら
 			if (CoverBlock(this) != NULL)
 			{
 				if (CoverBlock(this)->GetPriority() == PRIORITY_PLAYER)
@@ -99,6 +107,8 @@ void CGravityReverse::Update(void)
 
 					m_nTime = 0;
 					m_bUseCool = true;
+
+					// 重力を反転
 					CData::SetGravity(CManager::GetData()->GetGravity() * -1.0f);
 					CoverBlock(this)->SetMoveY(JUMP_HEIGHT * (Sign(CData::GetGravity() * -1.0f)));
 				}

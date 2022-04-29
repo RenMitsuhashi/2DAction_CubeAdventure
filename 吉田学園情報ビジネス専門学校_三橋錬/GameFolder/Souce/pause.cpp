@@ -93,53 +93,84 @@ void CPause::Update(void)
 			m_pUIBg[Pause_Title] = CUIBg::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + (SCREEN_WIDTH / 5.0f), SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), size, CTexture::GetTexture(CTexture::Tex_Pause_Title));
 		}
 
-		// 左を押す
-		if (CManager::GetKeyboard()->GetTrigger(DIK_A) ||
-			CManager::GetKeyboard()->GetTrigger(DIK_LEFT))
+		if (CFade::GetFade() == CFade::FADE_NONE)
 		{
-			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_CURSOR);
-			CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_CURSOR, 0.4f);
-
-			m_nSelect--;
-
-			if (m_nSelect < Select_Resume_Save)
+			// 左を押す
+			if (CManager::GetKeyboard()->GetTrigger(DIK_A) ||
+				CManager::GetKeyboard()->GetTrigger(DIK_LEFT))
 			{
-				m_nSelect = Select_Max - 1;
-			}
-		}
+				CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_CURSOR);
+				CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_CURSOR, 0.4f);
 
-		// 右を押す
-		if (CManager::GetKeyboard()->GetTrigger(DIK_D) ||
-			CManager::GetKeyboard()->GetTrigger(DIK_RIGHT))
-		{
-			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_CURSOR);
-			CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_CURSOR, 0.4f);
+				m_nSelect--;
 
-			m_nSelect++;
-
-			if (m_nSelect > Select_Max - 1)
-			{
-				m_nSelect = Select_Resume_Save;
-			}
-		}
-
-		// エンターキー
-		if (CManager::GetKeyboard()->GetTrigger(DIK_RETURN))
-		{
-			CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_ENTER);
-			CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_ENTER, 0.4f);
-
-			switch (m_nSelect)
-			{
-			case Select_Resume_Save:
-				
-				// ビルドシーンならセーブしてから
-				if (CData::GetNowScene() == CManager::MODE_BUILD &&
-					!CData::GetNowGame())
+				if (m_nSelect < Select_Resume_Save)
 				{
-					CStageLoad::SaveFile();
+					m_nSelect = Select_Max - 1;
 				}
+			}
 
+			// 右を押す
+			if (CManager::GetKeyboard()->GetTrigger(DIK_D) ||
+				CManager::GetKeyboard()->GetTrigger(DIK_RIGHT))
+			{
+				CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_CURSOR);
+				CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_CURSOR, 0.4f);
+
+				m_nSelect++;
+
+				if (m_nSelect > Select_Max - 1)
+				{
+					m_nSelect = Select_Resume_Save;
+				}
+			}
+
+			// エンターキー
+			if (CManager::GetKeyboard()->GetTrigger(DIK_RETURN))
+			{
+				CManager::GetSound()->Play(CSound::SOUND_LABEL_SE_ENTER);
+				CManager::GetSound()->ControllVoice(CSound::SOUND_LABEL_SE_ENTER, 0.4f);
+
+				switch (m_nSelect)
+				{
+				case Select_Resume_Save:
+
+					// ビルドシーンならセーブしてから
+					if (CData::GetNowScene() == CManager::MODE_BUILD &&
+						!CData::GetNowGame())
+					{
+						CStageLoad::SaveFile();
+					}
+
+					// ポーズを解く
+					CData::SetPause(true);
+
+					for (int nCnt = 0; nCnt < Pause_Max; nCnt++)
+					{
+						if (m_pUIBg[nCnt])
+						{
+							m_pUIBg[nCnt]->SetDeath(true);
+							m_pUIBg[nCnt] = NULL;
+						}
+					}
+
+					break;
+
+				case Select_Title:
+					// タイトルへ戻す
+					CManager::GetFade()->SetFade(CManager::MODE_TITLE, 5);
+
+					break;
+
+				default:
+
+					break;
+				}
+			}
+
+			// ESCキーを押す
+			if (CManager::GetKeyboard()->GetTrigger(DIK_ESCAPE))
+			{
 				// ポーズを解く
 				CData::SetPause(true);
 
@@ -150,38 +181,6 @@ void CPause::Update(void)
 						m_pUIBg[nCnt]->SetDeath(true);
 						m_pUIBg[nCnt] = NULL;
 					}
-				}
-
-				break;
-
-			case Select_Title:
-
-				if (CFade::GetFade() == CFade::FADE_NONE)
-				{
-					// タイトルへ戻す
-					CManager::GetFade()->SetFade(CManager::MODE_TITLE, 5);
-				}
-
-				break;
-
-			default:
-
-				break;
-			}
-		}
-
-		// ESCキーを押す
-		if (CManager::GetKeyboard()->GetTrigger(DIK_ESCAPE))
-		{
-			// ポーズを解く
-			CData::SetPause(true);
-
-			for (int nCnt = 0; nCnt < Pause_Max; nCnt++)
-			{
-				if (m_pUIBg[nCnt])
-				{
-					m_pUIBg[nCnt]->SetDeath(true);
-					m_pUIBg[nCnt] = NULL;
 				}
 			}
 		}

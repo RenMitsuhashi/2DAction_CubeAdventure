@@ -59,8 +59,12 @@ void CSpiny::Update()
 {
 	if (CData::GetNowGame())
 	{
+		//=============================================================================
+		// 棘が上向きの場合
+		//=============================================================================
 		if (GetPtn() == 0)
 		{
+			// 上の判定を取得し、当たっていたらプレイヤーをキル
 			if (GetColision(DIRECTION_UP) != NULL)
 			{
 				if (GetColision(DIRECTION_UP)->GetPriority() == PRIORITY_PLAYER)
@@ -72,6 +76,7 @@ void CSpiny::Update()
 				}
 			}
 
+			// 左
 			if (GetColision(DIRECTION_LEFT) != NULL)
 			{
 				if (GetColision(DIRECTION_LEFT)->GetPriority() == PRIORITY_PLAYER)
@@ -83,6 +88,7 @@ void CSpiny::Update()
 				}
 			}
 
+			// 右
 			if (GetColision(DIRECTION_RIGHT) != NULL)
 			{
 				if (GetColision(DIRECTION_RIGHT)->GetPriority() == PRIORITY_PLAYER)
@@ -95,8 +101,12 @@ void CSpiny::Update()
 			}
 		}
 
+		//=============================================================================
+		// 棘が下向きの場合
+		//=============================================================================
 		else
 		{
+			// 下の判定を取得し、当たっていたらプレイヤーをキル
 			if (GetColision(DIRECTION_DOWN) != NULL)
 			{
 				if (GetColision(DIRECTION_DOWN)->GetPriority() == PRIORITY_PLAYER)
@@ -108,6 +118,7 @@ void CSpiny::Update()
 				}
 			}
 
+			// 左
 			if (GetColision(DIRECTION_LEFT) != NULL)
 			{
 				if (GetColision(DIRECTION_LEFT)->GetPriority() == PRIORITY_PLAYER)
@@ -119,6 +130,7 @@ void CSpiny::Update()
 				}
 			}
 
+			// 右
 			if (GetColision(DIRECTION_RIGHT) != NULL)
 			{
 				if (GetColision(DIRECTION_RIGHT)->GetPriority() == PRIORITY_PLAYER)
