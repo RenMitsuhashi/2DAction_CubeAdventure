@@ -12,6 +12,7 @@
 #include "screenbg.h"
 #include "fade.h"
 #include "sound.h"
+#include "data.h"
 
 //=============================================================================
 // コンストラクタ
@@ -116,6 +117,11 @@ void CModeSelect::Update()
 			case CTitle::Title_Game:
 				// ゲームシーン
 				CManager::GetFade()->SetFade(CManager::MODE_GAME, 5);
+
+				if (CManager::GetKeyboard()->GetPress(DIK_LSHIFT))
+				{
+					CData::SetNextStage(CData::Stage_Build);
+				}
 
 				break;
 
