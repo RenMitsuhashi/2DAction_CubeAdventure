@@ -119,10 +119,10 @@ HRESULT CStageLoad::LoadFile(const char *FileName)
 		GridData.reserve(y + 1);
 
 		string strX = "";
-		istringstream FileY(strY);
+		istringstream line(strY);
 
 		// ‹æØ‚è•¶š‚ª‚È‚­‚È‚é‚Ü‚Å•¶š‚ğ‹æØ‚Á‚Ä‚¢‚­
-		while (getline(FileY, strX, ','))
+		while (getline(line, strX, ','))
 		{
 			if (strX == "")
 			{

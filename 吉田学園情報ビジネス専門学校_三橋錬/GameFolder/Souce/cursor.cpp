@@ -94,9 +94,9 @@ void CCursor::Uninit()
 //=============================================================================
 void CCursor::Update()
 {
-	m_nColisionType = OBJ_NULL;
-	m_Colisionmove = 0.0f;
-	m_Colisionstoptime = 0;
+	m_nColisionType = OBJ_NULL;		// 現在当たっているオブジェクトの種類
+	m_Colisionmove = 0.0f;			// 現在当たっているオブジェクトの移動量
+	m_Colisionstoptime = 0;			// 現在当たっているオブジェクトの移動までの時間
 
 	int tex = CTexture::Tex_NormalBlock - 1;
 
@@ -126,10 +126,13 @@ void CCursor::Update()
 		// 下キー
 		if (CManager::GetKeyboard()->GetTrigger(DIK_DOWN))
 		{
+			// 配置するオブジェクトの種類を切り替え
 			m_nType++;
 
+			// 選べる種類の限界を突破したら
 			if (m_nType == OBJ_TargetBlock)
 			{
+				// 一番最初のオブジェクトへm_nTypeをずらす
 				m_nType = OBJ_NULL + 1;
 			}
 
@@ -140,10 +143,13 @@ void CCursor::Update()
 		// 上キー
 		if (CManager::GetKeyboard()->GetTrigger(DIK_UP))
 		{
+			// 配置するオブジェクトの種類を切り替え
 			m_nType--;
 
+			// 選べる種類の限界を突破したら
 			if (m_nType == OBJ_NULL)
 			{
+				// 一番最後のオブジェクトへm_nTypeをずらす
 				m_nType = OBJ_TargetBlock - 1;
 			}
 
